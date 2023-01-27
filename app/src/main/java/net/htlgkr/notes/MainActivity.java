@@ -10,14 +10,17 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class MainActivity extends AppCompatActivity {
-    private ListView noteListView;
+    private GridView noteListView;
     private NotesAdapter mNotesAdapter;
     private List<Note> noteList = new ArrayList<>();
     private BroadcastReceiver mReceiver;
@@ -28,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        noteListView = findViewById(R.id.notesLV);
+        noteListView = findViewById(R.id.notesGV);
         mNotesAdapter = new NotesAdapter(this, R.layout.notelayout, noteList);
         noteListView.setAdapter(mNotesAdapter);
         setUpReceiver();
@@ -55,13 +58,13 @@ public class MainActivity extends AppCompatActivity {
 
     private void addNoteToList(Note note) {
         noteList.add(note);
-        noteListView.setAdapter(mNotesAdapter);
+        Collections.sort(noteList, (o1, o2) -> o1.getDate().isBefore(o2.getDate()) ? 1 : -1);
         mNotesAdapter.notifyDataSetChanged();
     }
 
     private void removeNote(Note note) {
         noteList.remove(note);
-        noteListView.setAdapter(mNotesAdapter);
+        mNotesAdapter.notifyDataSetChanged();
     }
 
     @Override

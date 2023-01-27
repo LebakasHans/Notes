@@ -7,11 +7,16 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <ListView
-        android:id="@+id/notesLV"
+    <GridView
+        android:id="@+id/notesGV"
         android:layout_width="match_parent"
-        android:layout_height="598dp">
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        android:horizontalSpacing="5dp"
+        android:numColumns="2"
+        android:verticalSpacing="5dp"
+        >
 
-    </ListView>
+    </GridView>
 
 </LinearLayout>

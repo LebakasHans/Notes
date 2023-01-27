@@ -1,12 +1,20 @@
 package net.htlgkr.notes;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.LayerDrawable;
+import android.graphics.drawable.ShapeDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
+
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -24,7 +32,7 @@ public class NotesAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return 0;
+        return noteList.size();
     }
 
     @Override
@@ -47,8 +55,21 @@ public class NotesAdapter extends BaseAdapter {
                 .setText(note.getNotes());
         ((TextView) listItem.findViewById(R.id.noteLayoutDate))
                 .setText(
-                        DateTimeFormatter.ofPattern("dd.MM.yyyy").format(note.getDate())
+                        DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm").format(note.getDate())
                 );
+        if (note.getDate().isBefore(LocalDateTime.now())){
+            setBackgroundColorOfNote(listItem, "#FFCCCB");
+        }else {
+            setBackgroundColorOfNote(listItem, "#FFFFFF");
+        }
         return listItem;
+    }
+
+    private void setBackgroundColorOfNote(View listItem, String color) {
+        Drawable drawable = ContextCompat.getDrawable(inflater.getContext(), R.drawable.note_item_border);
+        GradientDrawable gradientDrawable  = (GradientDrawable) drawable;
+        gradientDrawable.setColor(Color.parseColor(color));
+        if(listItem != null)
+            listItem.setBackground(gradientDrawable);
     }
 }
