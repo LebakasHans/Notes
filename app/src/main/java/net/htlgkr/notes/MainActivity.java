@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
         noteRecyclerView = findViewById(R.id.notesRV);
         mNoteAdapter = new NotesAdapter(noteList, this);
         noteRecyclerView.setAdapter(mNoteAdapter);
+
         setUpReceiver();
     }
 
@@ -39,13 +40,26 @@ public class MainActivity extends AppCompatActivity {
         mReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                Note newNote = (Note) intent.getSerializableExtra("newNote");
-                if (newNote != null) {
-                    addNoteToList(newNote);
+                if((boolean) intent.getSerializableExtra("isEdit")){
+                    setNoteInList(
+                            (Note) intent.getSerializableExtra("newNote")
+                            , intent.getIntExtra("position", -1)
+                    );
+                }
+                else if(!(boolean) intent.getSerializableExtra("isDetail")){
+                    Note newNote = (Note) intent.getSerializableExtra("newNote");
+                    if (newNote != null) {
+                        addNoteToList(newNote);
+                    }
                 }
             }
         };
         LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, new IntentFilter("New-Note"));
+    }
+
+    private void setNoteInList(Note note, int position) {
+        noteList.set(position, note);
+        mNoteAdapter.notifyDataSetChanged();
     }
 
     @Override
