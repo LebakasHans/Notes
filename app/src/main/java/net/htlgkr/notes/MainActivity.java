@@ -11,13 +11,18 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
+import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+    public static final String saveFileName = "savedNotes.csv";
     private RecyclerView noteRecyclerView;
     private List<Note> noteList = new ArrayList<>();
     private BroadcastReceiver mReceiver;
@@ -93,11 +98,30 @@ public class MainActivity extends AppCompatActivity {
                 addNewNote();
                 break;
             case R.id.saveNotes:
-                //TODO
-                Toast.makeText(this, "Help Clicked", Toast.LENGTH_LONG).show();
+                saveNotes();
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void saveNotes() {
+        try (BufferedWriter out = new BufferedWriter(new OutputStreamWriter(openFileOutput(saveFileName, MODE_PRIVATE)))) {
+            out.write(Note.CSV_HEADER);
+            out.newLine();
+            noteList.stream()
+                    .forEach(note -> {
+                        try {
+                            out.write(Note.serialize(note));
+                            out.newLine();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    });
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void addNewNote() {

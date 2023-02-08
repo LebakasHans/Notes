@@ -1,10 +1,13 @@
 package net.htlgkr.notes;
 
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Note implements Serializable {
+    public static final String CSV_HEADER = "TITLE;NOTES;DATETIME";
+    public static final String DATE_PATTERN = "dd.MM.yyyy HH:mm";
+
     private String title;
     private String notes;
     private LocalDateTime date;
@@ -37,5 +40,9 @@ public class Note implements Serializable {
 
     public void setDate(LocalDateTime date) {
         this.date = date;
+    }
+
+    public static String serialize(Note note) {
+        return note.getTitle() + ";" + note.getNotes() + ";" + DateTimeFormatter.ofPattern(DATE_PATTERN).format(note.getDate());
     }
 }

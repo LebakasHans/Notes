@@ -47,7 +47,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
         holder.titleTextView.setText(currentNote.getTitle());
         holder.notesTextView.setText(currentNote.getNotes());
         holder.dateTextView.setText(
-                DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm").format(currentNote.getDate())
+                DateTimeFormatter.ofPattern(Note.DATE_PATTERN).format(currentNote.getDate())
         );
 
         if (currentNote.getDate().isBefore(LocalDateTime.now())){
