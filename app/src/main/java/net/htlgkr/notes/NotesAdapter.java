@@ -50,7 +50,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
                 DateTimeFormatter.ofPattern(Note.DATE_PATTERN).format(currentNote.getDate())
         );
 
-        if (currentNote.getDate().isBefore(LocalDateTime.now())){
+        if (currentNote.getDate().isAfter(LocalDateTime.now())){
             setBackgroundColorOfNote(holder.itemView, "#FFCCCB");
         }else {
             setBackgroundColorOfNote(holder.itemView, "#FFFFFF");
